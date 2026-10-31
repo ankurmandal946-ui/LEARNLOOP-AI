@@ -1,0 +1,10 @@
+{
+  "name": "Remix LearnLoop AI",
+  "description": "Universal AI-powered academic learning, assessment, and teaching platform. One Platform. Every Subject. Every Learner. Smarter Learning.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

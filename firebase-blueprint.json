@@ -1,0 +1,851 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Non-PII academic workspace profile for students, educators, professors, tutors, administrators, and independent learners.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the account owner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Full display name of the learner or educator.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "personaType": {
+          "type": "string",
+          "description": "Selected academic workspace persona.",
+          "maxLength": 40,
+          "enum": [
+            "student",
+            "teacher",
+            "professor",
+            "tutor",
+            "institution_admin",
+            "independent_learner"
+          ]
+        },
+        "country": {
+          "type": "string",
+          "description": "Country or region of study.",
+          "maxLength": 80
+        },
+        "institutionName": {
+          "type": "string",
+          "description": "Optional school, university, college, or coaching centre name.",
+          "maxLength": 160
+        },
+        "institutionType": {
+          "type": "string",
+          "description": "Type of academic institution or independent self-study.",
+          "maxLength": 60
+        },
+        "educationCategory": {
+          "type": "string",
+          "description": "Broad academic tier (School, Higher Education, Competitive & Professional, Custom).",
+          "maxLength": 40
+        },
+        "educationLevel": {
+          "type": "string",
+          "description": "Specific academic level (e.g. Class 10, Undergraduate, Postgraduate, PhD, Competitive Exam).",
+          "maxLength": 100
+        },
+        "customEducationLevel": {
+          "type": "string",
+          "description": "User-defined custom academic level or examination system.",
+          "maxLength": 120
+        },
+        "gradeOrYear": {
+          "type": "string",
+          "description": "Class, grade, semester, or academic year.",
+          "maxLength": 80
+        },
+        "degreeOrProgramme": {
+          "type": "string",
+          "description": "Degree, board, or certification programme.",
+          "maxLength": 120
+        },
+        "departmentOrBranch": {
+          "type": "string",
+          "description": "Academic department, stream, or engineering/medical branch.",
+          "maxLength": 120
+        },
+        "designation": {
+          "type": "string",
+          "description": "Educator or faculty designation when applicable.",
+          "maxLength": 100
+        },
+        "teachingExperience": {
+          "type": "string",
+          "description": "Optional years or summary of teaching experience.",
+          "maxLength": 80
+        },
+        "preferredLanguage": {
+          "type": "string",
+          "description": "Preferred language for tutoring and question generation.",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "skillLevel": {
+          "type": "string",
+          "description": "Current self-assessed or calibrated skill tier.",
+          "maxLength": 40,
+          "enum": ["foundational", "intermediate", "advanced", "exam-prep"]
+        },
+        "learningGoals": {
+          "type": "string",
+          "description": "Learner or educator academic objectives.",
+          "maxLength": 600
+        },
+        "subjectsList": {
+          "type": "array",
+          "description": "Bounded list of enrolled or taught subject names (max 30)."
+        },
+        "streakDays": {
+          "type": "integer",
+          "description": "Active daily learning streak count."
+        },
+        "totalStudyMinutes": {
+          "type": "integer",
+          "description": "Cumulative minutes spent practicing and studying."
+        },
+        "diagnosticCompleted": {
+          "type": "boolean",
+          "description": "Whether initial diagnostic assessment was completed."
+        },
+        "onboardingCompleted": {
+          "type": "boolean",
+          "description": "Whether role-based onboarding has been completed."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of profile creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of most recent profile update."
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "personaType",
+        "country",
+        "institutionName",
+        "institutionType",
+        "educationCategory",
+        "educationLevel",
+        "customEducationLevel",
+        "gradeOrYear",
+        "degreeOrProgramme",
+        "departmentOrBranch",
+        "designation",
+        "teachingExperience",
+        "preferredLanguage",
+        "skillLevel",
+        "learningGoals",
+        "subjectsList",
+        "streakDays",
+        "totalStudyMinutes",
+        "diagnosticCompleted",
+        "onboardingCompleted",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserPrivateInfo": {
+      "title": "UserPrivateInfo",
+      "description": "Isolated PII document storing user email strictly accessible only by the owner.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Authenticated user email address.",
+          "minLength": 3,
+          "maxLength": 254
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["uid", "email", "createdAt", "updatedAt"]
+    },
+    "AcademicSubject": {
+      "title": "AcademicSubject",
+      "description": "Custom or library subject/course organized by a learner or educator.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the user who owns this subject.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Subject or course title.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "category": {
+          "type": "string",
+          "description": "Academic discipline category.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "courseCode": {
+          "type": "string",
+          "description": "Optional course or syllabus code.",
+          "maxLength": 40
+        },
+        "educationLevel": {
+          "type": "string",
+          "description": "Target academic level for this subject.",
+          "maxLength": 100
+        },
+        "description": {
+          "type": "string",
+          "description": "Overview and syllabus scope.",
+          "maxLength": 600
+        },
+        "chaptersList": {
+          "type": "array",
+          "description": "Bounded list of chapter/module titles (max 50)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "category",
+        "courseCode",
+        "educationLevel",
+        "description",
+        "chaptersList",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SubjectTopic": {
+      "title": "SubjectTopic",
+      "description": "Granular topic or concept node tracking evidence-based mastery, accuracy, time spent, and diagnosed misconceptions.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the learner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "subjectId": {
+          "type": "string",
+          "description": "Parent AcademicSubject document ID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "Denormalized subject title.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "chapterName": {
+          "type": "string",
+          "description": "Chapter or module name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "name": {
+          "type": "string",
+          "description": "Topic or concept name.",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "formulaOrKeyRule": {
+          "type": "string",
+          "description": "Core formula, theorem, syntax, or governing principle.",
+          "maxLength": 240
+        },
+        "score": {
+          "type": "integer",
+          "description": "Evidence-based mastery percentage (0-100)."
+        },
+        "questionsAttempted": {
+          "type": "integer",
+          "description": "Total practice and assessment questions attempted."
+        },
+        "questionsCorrect": {
+          "type": "integer",
+          "description": "Total questions answered accurately."
+        },
+        "totalTimeSeconds": {
+          "type": "integer",
+          "description": "Total study and problem-solving time in seconds."
+        },
+        "difficultyTier": {
+          "type": "string",
+          "description": "Current adaptive difficulty level.",
+          "maxLength": 40,
+          "enum": ["foundational", "intermediate", "advanced", "exam-prep"]
+        },
+        "status": {
+          "type": "string",
+          "description": "Proficiency classification.",
+          "maxLength": 40,
+          "enum": ["needs-focus", "developing", "proficient", "mastered"]
+        },
+        "lastChangeReason": {
+          "type": "string",
+          "description": "Transparent explanation of why mastery changed on the last evidence event.",
+          "maxLength": 400
+        },
+        "misconceptions": {
+          "type": "array",
+          "description": "Bounded list of diagnosed conceptual misconceptions (max 25)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "subjectId",
+        "subjectName",
+        "chapterName",
+        "name",
+        "formulaOrKeyRule",
+        "score",
+        "questionsAttempted",
+        "questionsCorrect",
+        "totalTimeSeconds",
+        "difficultyTier",
+        "status",
+        "lastChangeReason",
+        "misconceptions",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "GeneratedQuestionSet": {
+      "title": "GeneratedQuestionSet",
+      "description": "Saved question bank or custom examination paper generated via Gemini.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the creator.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Question set or exam paper title.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "Subject name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "chapterName": {
+          "type": "string",
+          "description": "Chapter or topic focus.",
+          "maxLength": 120
+        },
+        "educationLevel": {
+          "type": "string",
+          "description": "Target academic level.",
+          "maxLength": 100
+        },
+        "examType": {
+          "type": "string",
+          "description": "Examination board or test category.",
+          "maxLength": 100
+        },
+        "questionFormat": {
+          "type": "string",
+          "description": "Question format type.",
+          "maxLength": 80
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "Target difficulty tier.",
+          "maxLength": 40
+        },
+        "questionCount": {
+          "type": "integer",
+          "description": "Number of questions in this set (1-100)."
+        },
+        "marksPerQuestion": {
+          "type": "integer",
+          "description": "Marks awarded per correct question."
+        },
+        "negativeMarksScaled": {
+          "type": "integer",
+          "description": "Negative marks multiplied by 100 (e.g. 25 = -0.25)."
+        },
+        "timeLimitMinutes": {
+          "type": "integer",
+          "description": "Time limit in minutes."
+        },
+        "language": {
+          "type": "string",
+          "description": "Language of the generated questions.",
+          "maxLength": 60
+        },
+        "questions": {
+          "type": "array",
+          "description": "Bounded native list of question map objects (max 100)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "subjectName",
+        "chapterName",
+        "educationLevel",
+        "examType",
+        "questionFormat",
+        "difficulty",
+        "questionCount",
+        "marksPerQuestion",
+        "negativeMarksScaled",
+        "timeLimitMinutes",
+        "language",
+        "questions",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ExamAttempt": {
+      "title": "ExamAttempt",
+      "description": "Immutable completed or in-progress examination/practice session record.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the examinee.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Assessment title.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "mode": {
+          "type": "string",
+          "description": "Assessment mode (practice, mock, timed, chapter, full-syllabus).",
+          "maxLength": 40
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "Subject assessed.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "totalQuestions": {
+          "type": "integer",
+          "description": "Total questions in the session."
+        },
+        "correctCount": {
+          "type": "integer",
+          "description": "Number of questions answered accurately."
+        },
+        "scoreScaled": {
+          "type": "integer",
+          "description": "Total marks earned multiplied by 100."
+        },
+        "maxMarksScaled": {
+          "type": "integer",
+          "description": "Maximum possible marks multiplied by 100."
+        },
+        "percentage": {
+          "type": "integer",
+          "description": "Normalized percentage score (0-100)."
+        },
+        "timeTakenSeconds": {
+          "type": "integer",
+          "description": "Duration spent in seconds."
+        },
+        "misconceptionsCount": {
+          "type": "integer",
+          "description": "Count of conceptual misconceptions diagnosed."
+        },
+        "calculationErrorsCount": {
+          "type": "integer",
+          "description": "Count of arithmetic or unit slips."
+        },
+        "incompleteCount": {
+          "type": "integer",
+          "description": "Count of incomplete reasoning responses."
+        },
+        "status": {
+          "type": "string",
+          "description": "Lifecycle status; locked once completed.",
+          "maxLength": 30,
+          "enum": ["in_progress", "completed"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "mode",
+        "subjectName",
+        "totalQuestions",
+        "correctCount",
+        "scoreScaled",
+        "maxMarksScaled",
+        "percentage",
+        "timeTakenSeconds",
+        "misconceptionsCount",
+        "calculationErrorsCount",
+        "incompleteCount",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SpacedRevisionItem": {
+      "title": "SpacedRevisionItem",
+      "description": "SM-2 spaced repetition schedule record for a learner topic.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the learner.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "topicKey": {
+          "type": "string",
+          "description": "Topic identifier.",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "Subject name.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "topicName": {
+          "type": "string",
+          "description": "Topic display name.",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "dueDate": {
+          "type": "string",
+          "description": "ISO YYYY-MM-DD due date.",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "intervalDays": {
+          "type": "integer",
+          "description": "Current review interval in days."
+        },
+        "repetitions": {
+          "type": "integer",
+          "description": "Consecutive successful review count."
+        },
+        "easeFactorScaled": {
+          "type": "integer",
+          "description": "SM-2 ease factor multiplied by 100 (e.g. 250 = 2.50)."
+        },
+        "lastScore": {
+          "type": "integer",
+          "description": "Most recent evaluation score (0-100)."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current review state.",
+          "maxLength": 30,
+          "enum": ["due", "upcoming", "mastered"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "topicKey",
+        "subjectName",
+        "topicName",
+        "dueDate",
+        "intervalDays",
+        "repetitions",
+        "easeFactorScaled",
+        "lastScore",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "EducatorClass": {
+      "title": "EducatorClass",
+      "description": "Class, course cohort, or institution batch managed by an educator.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the educator or institution administrator.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Class or batch name.",
+          "minLength": 1,
+          "maxLength": 140
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "Primary subject taught.",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "educationLevel": {
+          "type": "string",
+          "description": "Academic level of the cohort.",
+          "maxLength": 100
+        },
+        "institutionName": {
+          "type": "string",
+          "description": "Optional institution or department name.",
+          "maxLength": 160
+        },
+        "inviteCode": {
+          "type": "string",
+          "description": "Unique alphanumeric class invitation code.",
+          "minLength": 4,
+          "maxLength": 24,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "rosterList": {
+          "type": "array",
+          "description": "Bounded list of enrolled student records (max 50)."
+        },
+        "assignmentsList": {
+          "type": "array",
+          "description": "Bounded list of assigned assessments (max 50)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "subjectName",
+        "educationLevel",
+        "institutionName",
+        "inviteCode",
+        "rosterList",
+        "assignmentsList",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "StudyDocument": {
+      "title": "StudyDocument",
+      "description": "Uploaded study material metadata, extracted concepts, summaries, and flashcards.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the uploader.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Document display title.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "fileName": {
+          "type": "string",
+          "description": "Original filename.",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "Document MIME type.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "subjectName": {
+          "type": "string",
+          "description": "Associated subject.",
+          "maxLength": 120
+        },
+        "summary": {
+          "type": "string",
+          "description": "AI-extracted summary grounded in the document.",
+          "maxLength": 8000
+        },
+        "revisionNotes": {
+          "type": "string",
+          "description": "Concise revision notes extracted from the document.",
+          "maxLength": 8000
+        },
+        "extractedTopics": {
+          "type": "array",
+          "description": "Bounded list of extracted chapter/topic strings (max 40)."
+        },
+        "flashcards": {
+          "type": "array",
+          "description": "Bounded list of flashcard map objects (max 50)."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "fileName",
+        "mimeType",
+        "subjectName",
+        "summary",
+        "revisionNotes",
+        "extractedTopics",
+        "flashcards",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Non-PII academic profile owned by userId."
+    },
+    "/userPrivate/{userId}": {
+      "schema": "UserPrivateInfo",
+      "description": "Isolated PII document containing email owned strictly by userId."
+    },
+    "/subjects/{subjectId}": {
+      "schema": "AcademicSubject",
+      "description": "Custom or library academic subjects owned by a user."
+    },
+    "/topics/{topicId}": {
+      "schema": "SubjectTopic",
+      "description": "Topic mastery and misconception tracking nodes linked to an owned subject."
+    },
+    "/questionSets/{setId}": {
+      "schema": "GeneratedQuestionSet",
+      "description": "AI-generated question sets and custom question papers."
+    },
+    "/examAttempts/{attemptId}": {
+      "schema": "ExamAttempt",
+      "description": "Practice and timed examination attempt records."
+    },
+    "/revisions/{revisionId}": {
+      "schema": "SpacedRevisionItem",
+      "description": "SM-2 spaced repetition items owned by a learner."
+    },
+    "/educatorClasses/{classId}": {
+      "schema": "EducatorClass",
+      "description": "Educator or institution cohorts with isolated owner access."
+    },
+    "/studyDocuments/{docId}": {
+      "schema": "StudyDocument",
+      "description": "Uploaded academic document summaries, topics, and flashcards."
+    }
+  }
+}
